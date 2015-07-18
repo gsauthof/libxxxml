@@ -31,6 +31,12 @@ add_library(xxxml_static STATIC
   ${LIB_SRC}
   )
 
+set_property(TARGET xxxml xxxml_static PROPERTY INCLUDE_DIRECTORIES
+  ${Boost_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${XML2_INCLUDE_DIR}
+  )
+
 # under windows shared/static libraries have the same extension ...
 if(${UNIX})
   set_target_properties(xxxml_static PROPERTIES OUTPUT_NAME xxxml)
@@ -42,7 +48,7 @@ IF(${CMAKE_PROJECT_NAME} STREQUAL "libxxxml")
     test/main.cc
     test/xxxml.cc
     )
-  set_property(TARGET ut xxxml xxxml_static PROPERTY INCLUDE_DIRECTORIES
+  set_property(TARGET ut PROPERTY INCLUDE_DIRECTORIES
     ${Boost_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${XML2_INCLUDE_DIR}
