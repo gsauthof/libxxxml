@@ -566,6 +566,21 @@ namespace xxxml {
         throw Runtime_Error("could not format dump document");
       return std::pair<Char_Ptr, size_t>(Char_Ptr(s, xmlFree), size_t(n));
     }
+
+    unsigned format_dump(FILE *f, const Ptr &doc, bool format)
+    {
+      int r = xmlDocFormatDump(f, const_cast<xmlDoc*>(doc.get()),
+          format);
+      if (r == -1)
+        throw Runtime_Error("doc format dump failed");
+      return unsigned(r);
+    }
+  }
+
+  void elem_dump(FILE *f, const doc::Ptr &doc, const xmlNode *node)
+  {
+    xmlElemDump(f, const_cast<xmlDoc*>(doc.get()),
+        const_cast<xmlNode*>(node));
   }
 
   const char *name(const xmlNode *node)

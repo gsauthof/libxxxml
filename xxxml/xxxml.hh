@@ -110,11 +110,13 @@ namespace xxxml {
     xmlNode *set_root_element(Ptr &doc, xmlNode *root);
     std::pair<Char_Ptr, size_t> dump_format_memory(Ptr &doc, int format = 1);
 
+    unsigned format_dump(FILE *f, const Ptr &doc, bool format = true);
+
   }
 
   doc::Ptr new_doc();
 
-
+  void elem_dump(FILE *f, const doc::Ptr &doc, const xmlNode *node);
 
   using Parser_Ctxt_Ptr
     = std::unique_ptr<xmlParserCtxt, void(*)(xmlParserCtxt*)>;
