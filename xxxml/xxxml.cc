@@ -673,6 +673,11 @@ namespace xxxml {
       throw Runtime_Error("Could not add child");
     return r;
   }
+  void node_add_content(xmlNode *node, const char *text, unsigned len)
+  {
+    xmlNodeAddContentLen(node,
+        reinterpret_cast<const xmlChar*>(text), int(len));
+  }
 
   Node_Ptr unlink_node(xmlNode *node)
   {

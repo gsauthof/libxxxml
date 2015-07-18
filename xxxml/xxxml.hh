@@ -232,6 +232,8 @@ namespace xxxml {
 
   xmlNode *add_child(xmlNode *parent, xmlNode *node);
 
+  void node_add_content(xmlNode *node, const char *text, unsigned len);
+
   using Node_Ptr = std::unique_ptr<xmlNode, void(*)(xmlNode*)>;
 
   Node_Ptr unlink_node(xmlNode *node);
