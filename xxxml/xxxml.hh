@@ -245,6 +245,8 @@ namespace xxxml {
       const std::string &name, const std::string &value);
   // XXX add ns version
 
+  const char *get_prop(const xmlNode *node, const char *name);
+
   using Output_Buffer_Ptr
     = std::unique_ptr<xmlOutputBuffer, int (*)(xmlOutputBuffer*)>;
 

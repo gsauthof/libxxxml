@@ -715,6 +715,14 @@ namespace xxxml {
     return new_prop(node, name.c_str(), value.c_str());
   }
 
+  const char *get_prop(const xmlNode *node, const char *name)
+  {
+    const xmlChar *r = xmlGetProp(const_cast<xmlNode*>(node),
+        reinterpret_cast<const xmlChar*>(name));
+    if (!r)
+      throw Runtime_Error("Attribute not available: " + string(name));
+    return reinterpret_cast<const char*>(r);
+  }
 
   namespace text_reader {
 
