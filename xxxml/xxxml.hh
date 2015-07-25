@@ -213,8 +213,12 @@ namespace xxxml {
 
 
   const char *name(const xmlNode *node);
+  const char *name(const xmlAttr *node);
   const char *content(const xmlNode *node);
   size_t child_element_count(const xmlNode *node);
+
+  const xmlNode *first_element_child(const xmlNode *node);
+  const xmlNode *next_element_sibling(const xmlNode *node);
 
   xmlNode *new_doc_node(doc::Ptr &doc, const char *name);
   xmlNode *new_doc_node(doc::Ptr &doc, const std::string &name);

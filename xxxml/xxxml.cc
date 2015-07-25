@@ -595,6 +595,10 @@ namespace xxxml {
   {
     return reinterpret_cast<const char*>(node->name);
   }
+  const char *name(const xmlAttr *node)
+  {
+    return reinterpret_cast<const char*>(node->name);
+  }
   const char *content(const xmlNode *node)
   {
     return reinterpret_cast<const char*>(node->content);
@@ -602,6 +606,14 @@ namespace xxxml {
   size_t child_element_count(const xmlNode *node)
   {
     return xmlChildElementCount(const_cast<xmlNode*>(node));
+  }
+  const xmlNode *first_element_child(const xmlNode *node)
+  {
+    return xmlFirstElementChild(const_cast<xmlNode*>(node));
+  }
+  const xmlNode *next_element_sibling(const xmlNode *node)
+  {
+    return xmlNextElementSibling(const_cast<xmlNode*>(node));
   }
 
   Output_Buffer_Ptr alloc_output_buffer(xmlCharEncodingHandler *encoder)
