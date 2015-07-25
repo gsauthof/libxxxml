@@ -139,6 +139,7 @@ namespace xxxml {
   }
 
   namespace schema {
+
     Parser_Ctxt_Ptr new_parser_ctxt(const char *filename)
     {
       Parser_Ctxt_Ptr r(xmlSchemaNewParserCtxt(filename),
@@ -194,6 +195,13 @@ namespace xxxml {
       if (r > 0)
         throw Validate_Error("XML document is invalid");
     }
+
+    void set_valid_structured_errors(Valid_Ctxt_Ptr &v, xmlStructuredErrorFunc f,
+        void *user_ptr)
+    {
+      xmlSchemaSetValidStructuredErrors(v.get(), f, user_ptr);
+    }
+
   }
 
   namespace relaxng {

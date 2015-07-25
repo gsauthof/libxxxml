@@ -306,7 +306,6 @@ namespace xxxml {
     Object_Ptr compiled_eval(Comp_Expr_Ptr &expr, Context_Ptr &context);
   }
 
-  // XXX add validation error callback function
   namespace schema {
 
     using Parser_Ctxt_Ptr
@@ -327,6 +326,9 @@ namespace xxxml {
     Valid_Ctxt_Ptr new_valid_ctxt(Ptr &schema);
 
     void validate_doc(Valid_Ctxt_Ptr &valid_ctxt, const doc::Ptr &doc);
+
+    void set_valid_structured_errors(Valid_Ctxt_Ptr &v, xmlStructuredErrorFunc f,
+        void *user_ptr);
   }
 
   namespace relaxng {
