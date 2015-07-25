@@ -59,12 +59,13 @@
   
    global library init code:
 
-       xmlInitParser();
        LIBXML_TEST_VERSION
+       xmlInitParser();
   
    global cleanup code:
 
        xmlCleanupParser();
+       xmlSchemaCleanupTypes();
       
    (e.g. in `main()`, before/after all threads are started/finished)
 

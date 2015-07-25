@@ -21,7 +21,7 @@ find_path(XML2_INCLUDE_DIR libxml/xmlreader.h PATH_SUFFIXES libxml2
 
 set(LIB_SRC
   xxxml/xxxml.cc
-  #xxxml/util.cc
+  xxxml/util.cc
   )
 
 add_library(xxxml SHARED
@@ -47,6 +47,7 @@ IF(${CMAKE_PROJECT_NAME} STREQUAL "libxxxml")
   add_executable(ut
     test/main.cc
     test/xxxml.cc
+    test/util.cc
     )
   set_property(TARGET ut PROPERTY INCLUDE_DIRECTORIES
     ${Boost_INCLUDE_DIRS}
