@@ -38,6 +38,68 @@ BOOST_AUTO_TEST_SUITE(libxxxml)
       }
     }
 
+    BOOST_AUTO_TEST_CASE(get_child_)
+    {
+      doc::Ptr d = read_memory("<root><foo><fubar>Hello</fubar></foo><bar>World</bar></root>");
+      BOOST_REQUIRE(d.get());
+      const xmlNode *root = doc::get_root_element(d);
+      BOOST_CHECK_EQUAL(child_element_count(root), 2u);
+      BOOST_CHECK(optional_get_child(root, "bar"));
+      BOOST_CHECK_EQUAL(name(optional_get_child(root, "bar")), "bar");
+      BOOST_CHECK(!optional_get_child(root, "baz"));
+    }
+
+    BOOST_AUTO_TEST_CASE(add_)
+    {
+      doc::Ptr d = read_memory("<root><foo><fubar>Hello</fubar></foo><bar>World</bar></root>");
+      BOOST_REQUIRE(d.get());
+      const xmlNode* root = doc::get_root_element(d);
+      BOOST_CHECK_EQUAL(child_element_count(root), 2u);
+      add(d, "//root", "foo/element", "blah");
+      BOOST_CHECK_EQUAL(child_element_count(root), 2u);
+      {
+        xxxml::xpath::Context_Ptr c = xxxml::xpath::new_context(d);
+        xxxml::xpath::Object_Ptr o = xxxml::xpath::eval("/root/foo/element/text()", c);
+        BOOST_REQUIRE(o.get()->type == XPATH_NODESET);
+        BOOST_REQUIRE(o.get()->nodesetval);
+        BOOST_CHECK_EQUAL(xxxml::content(o.get()->nodesetval->nodeTab[0]), "blah");
+      }
+    }
+
+    BOOST_AUTO_TEST_CASE(add_sibling)
+    {
+      doc::Ptr d = read_memory("<root><foo><fubar>Hello</fubar></foo><bar>World</bar></root>");
+      BOOST_REQUIRE(d.get());
+      const xmlNode* root = doc::get_root_element(d);
+      BOOST_CHECK_EQUAL(child_element_count(root), 2u);
+      add(d, "//root", "+foo/element", "blah");
+      BOOST_CHECK_EQUAL(child_element_count(root), 3u);
+      {
+        xxxml::xpath::Context_Ptr c = xxxml::xpath::new_context(d);
+        xxxml::xpath::Object_Ptr o = xxxml::xpath::eval("/root/foo[2]/element/text()", c);
+        BOOST_REQUIRE(o.get()->type == XPATH_NODESET);
+        BOOST_REQUIRE(o.get()->nodesetval);
+        BOOST_CHECK_EQUAL(xxxml::content(o.get()->nodesetval->nodeTab[0]), "blah");
+      }
+    }
+
+    BOOST_AUTO_TEST_CASE(add_append)
+    {
+      doc::Ptr d = read_memory("<root><foo><fubar>Hello</fubar></foo><bar>World</bar></root>");
+      BOOST_REQUIRE(d.get());
+      const xmlNode* root = doc::get_root_element(d);
+      BOOST_CHECK_EQUAL(child_element_count(root), 2u);
+      add(d, "//root", "foo/fubar", " World", false);
+      BOOST_CHECK_EQUAL(child_element_count(root), 2u);
+      {
+        xxxml::xpath::Context_Ptr c = xxxml::xpath::new_context(d);
+        xxxml::xpath::Object_Ptr o = xxxml::xpath::eval("/root/foo/fubar/text()", c);
+        BOOST_REQUIRE(o.get()->type == XPATH_NODESET);
+        BOOST_REQUIRE(o.get()->nodesetval);
+        BOOST_CHECK_EQUAL(xxxml::content(o.get()->nodesetval->nodeTab[0]), "Hello World");
+      }
+    }
+
   BOOST_AUTO_TEST_SUITE_END() // util_
 
 BOOST_AUTO_TEST_SUITE_END() // libxxxml

@@ -611,9 +611,17 @@ namespace xxxml {
   {
     return xmlFirstElementChild(const_cast<xmlNode*>(node));
   }
+  xmlNode *first_element_child(xmlNode *node)
+  {
+    return xmlFirstElementChild(node);
+  }
   const xmlNode *next_element_sibling(const xmlNode *node)
   {
     return xmlNextElementSibling(const_cast<xmlNode*>(node));
+  }
+  xmlNode *next_element_sibling(xmlNode *node)
+  {
+    return xmlNextElementSibling(node);
   }
 
   Output_Buffer_Ptr alloc_output_buffer(xmlCharEncodingHandler *encoder)
@@ -712,6 +720,10 @@ namespace xxxml {
   {
     xmlNodeAddContentLen(node,
         reinterpret_cast<const xmlChar*>(text), int(len));
+  }
+  void node_add_content(xmlNode *node, const std::string &text)
+  {
+    node_add_content(node, text.data(), text.size());
   }
 
   Node_Ptr unlink_node(xmlNode *node)

@@ -218,7 +218,9 @@ namespace xxxml {
   size_t child_element_count(const xmlNode *node);
 
   const xmlNode *first_element_child(const xmlNode *node);
+  xmlNode *first_element_child(xmlNode *node);
   const xmlNode *next_element_sibling(const xmlNode *node);
+  xmlNode *next_element_sibling(xmlNode *node);
 
   xmlNode *new_doc_node(doc::Ptr &doc, const char *name);
   xmlNode *new_doc_node(doc::Ptr &doc, const std::string &name);
@@ -240,6 +242,7 @@ namespace xxxml {
   xmlNode *add_child(xmlNode *parent, xmlNode *node);
 
   void node_add_content(xmlNode *node, const char *text, unsigned len);
+  void node_add_content(xmlNode *node, const std::string &text);
 
   using Node_Ptr = std::unique_ptr<xmlNode, void(*)(xmlNode*)>;
 
