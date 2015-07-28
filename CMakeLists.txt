@@ -12,6 +12,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -Wall")
 find_package(Boost 1.55
   COMPONENTS
     unit_test_framework
+    regex
   REQUIRED
   )
 
@@ -56,6 +57,7 @@ IF(${CMAKE_PROJECT_NAME} STREQUAL "libxxxml")
     )
   target_link_libraries(ut
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    ${Boost_REGEX_LIBRARY}
     xxxml_static
     ${XML2_LIB}
     )
