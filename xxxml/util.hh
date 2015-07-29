@@ -8,6 +8,19 @@ namespace xxxml {
 
   namespace util {
 
+    class Node_Set {
+      private:
+        xpath::Context_Ptr c_;
+        xpath::Object_Ptr o_;
+      public:
+        Node_Set(doc::Ptr &doc, const std::string &xpath);
+
+        using iterator = xmlNode**;
+
+        iterator begin();
+        iterator end();
+    };
+
     void remove(doc::Ptr &doc, const std::string &xpath);
     void replace(doc::Ptr &doc, const std::string &xpath,
         const std::string &regex, const std::string &subst);

@@ -30,6 +30,27 @@ namespace xxxml {
 
   namespace util {
 
+    Node_Set::Node_Set(doc::Ptr &doc, const std::string &xpath)
+      :
+        c_(xxxml::xpath::new_context(doc)),
+        o_(xxxml::xpath::eval(xpath, c_))
+    {
+      if (o_.get()->type != XPATH_NODESET)
+        throw std::runtime_error("xpath must produce a nodeset");
+    }
+    Node_Set::iterator Node_Set::begin()
+    {
+      if (!o_.get()->nodesetval)
+        return nullptr;
+      return o_.get()->nodesetval->nodeTab;
+    }
+    Node_Set::iterator Node_Set::end()
+    {
+      if (!o_.get()->nodesetval)
+        return nullptr;
+      return o_.get()->nodesetval->nodeTab + o_.get()->nodesetval->nodeNr;
+    }
+
     void remove(doc::Ptr &doc, const std::string &xpath)
     {
       // making sure that removed_nodes is destroyed after the
@@ -37,37 +58,21 @@ namespace xxxml {
       // the destruction of the xpath object
       deque<Node_Ptr> removed_nodes;
       {
-        xxxml::xpath::Context_Ptr c = xxxml::xpath::new_context(doc);
-        xxxml::xpath::Object_Ptr o = xxxml::xpath::eval(xpath, c);
-        if (o.get()->type != XPATH_NODESET)
-          throw std::runtime_error("xpath must produce a nodeset for removal");
-        if (!o.get()->nodesetval)
-          return;
-
-        for (unsigned i = 0; i < unsigned(o.get()->nodesetval->nodeNr); ++i) {
-          xmlNode *node = o.get()->nodesetval->nodeTab[i];
+        Node_Set node_set(doc, xpath);
+        for (auto node : node_set)
           removed_nodes.push_back(unlink_node(node));
-        }
       }
     }
 
     void replace(doc::Ptr &doc, const std::string &xpath,
         const std::string &regex_str, const std::string &subst)
     {
-      xpath::Context_Ptr c = xpath::new_context(doc);
-      xpath::Object_Ptr o = xpath::eval(xpath, c);
-      if (o.get()->type != XPATH_NODESET)
-        throw std::runtime_error("xpath must produce a nodeset for replacement");
-      if (!o.get()->nodesetval)
-        return;
-
       const REGEX re(regex_str);
 
-      for (unsigned i = 0; i < unsigned(o.get()->nodesetval->nodeNr); ++i) {
-        xmlNode *node = o.get()->nodesetval->nodeTab[i];
+      Node_Set node_set(doc, xpath);
+      for (auto node : node_set) {
         if (first_element_child(node))
           continue; // ignore constructed tags
-
         string s;
         {
           xmlNode *child = node->children;
@@ -149,16 +154,9 @@ namespace xxxml {
     void add(doc::Ptr &doc, const std::string &xpath,
         const std::string &path, const std::string &value, bool replace_value)
     {
-      xpath::Context_Ptr c = xpath::new_context(doc);
-      xpath::Object_Ptr o = xpath::eval(xpath, c);
-      if (o.get()->type != XPATH_NODESET)
-        throw std::runtime_error("xpath must produce a nodeset for replacement");
-      if (!o.get()->nodesetval)
-        return;
-      for (unsigned i = 0; i < unsigned(o.get()->nodesetval->nodeNr); ++i) {
-        xmlNode *node = o.get()->nodesetval->nodeTab[i];
+      Node_Set node_set(doc, xpath);
+      for (auto node : node_set)
         add(node, path, value, replace_value);
-      }
     }
 
   }

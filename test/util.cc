@@ -100,6 +100,22 @@ BOOST_AUTO_TEST_SUITE(libxxxml)
       }
     }
 
+    BOOST_AUTO_TEST_CASE(empty_node_set)
+    {
+      doc::Ptr d = read_memory("<root><foo><fubar>Hello</fubar></foo><bar>World</bar></root>");
+      BOOST_REQUIRE(d.get());
+      const xmlNode* root = doc::get_root_element(d);
+      BOOST_CHECK_EQUAL(child_element_count(root), 2u);
+      Node_Set node_set(d, "/root/foo[2]/element/text()");
+      BOOST_CHECK(node_set.begin() == node_set.end());
+      unsigned i = 0;
+      for (auto node : node_set) {
+        (void)node;
+        ++i;
+      }
+      BOOST_CHECK_EQUAL(i, 0u);
+    }
+
   BOOST_AUTO_TEST_SUITE_END() // util_
 
 BOOST_AUTO_TEST_SUITE_END() // libxxxml
