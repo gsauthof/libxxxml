@@ -565,14 +565,14 @@ namespace xxxml {
     {
       return xmlDocSetRootElement(doc.get(), root);
     }
-    std::pair<Char_Ptr, size_t> dump_format_memory(Ptr &doc, int format)
+    std::pair<Char_Ptr, size_t> dump_format_memory(Ptr &doc, bool format)
     {
       xmlChar *s = nullptr;
       int n = 0;
       xmlDocDumpFormatMemory(doc.get(), &s, &n, format);
       if (!s || n < 0)
         throw Runtime_Error("could not format dump document");
-      return std::pair<Char_Ptr, size_t>(Char_Ptr(s, xmlFree), size_t(n));
+      return std::pair<Char_Ptr, size_t>(Char_Ptr(reinterpret_cast<char*>(s), xmlFree), size_t(n));
     }
 
     unsigned format_dump(FILE *f, const Ptr &doc, bool format)
@@ -745,6 +745,22 @@ namespace xxxml {
       const std::string &name, const std::string &value)
   {
     return new_prop(node, name.c_str(), value.c_str());
+  }
+
+  xmlAttr *set_prop(xmlNode *node, const char *name, const char *value)
+  {
+    auto r = xmlSetProp(node,
+        reinterpret_cast<const xmlChar*>(name),
+        reinterpret_cast<const xmlChar*>(value)
+        );
+    if (!r)
+      throw Runtime_Error("Could not allocate property");
+    return r;
+  }
+  xmlAttr *set_prop(xmlNode *node,
+      const std::string &name, const std::string &value)
+  {
+    return set_prop(node, name.c_str(), value.c_str());
   }
 
   const char *get_prop(const xmlNode *node, const char *name)

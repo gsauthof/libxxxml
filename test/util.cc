@@ -116,6 +116,19 @@ BOOST_AUTO_TEST_SUITE(libxxxml)
       BOOST_CHECK_EQUAL(i, 0u);
     }
 
+    BOOST_AUTO_TEST_CASE(add_attributes)
+    {
+      doc::Ptr d = read_memory("<root><foo><bar xyz='a'>Hello</bar></foo><bar>World</bar></root>");
+      BOOST_REQUIRE(d.get());
+      const xmlNode* root = doc::get_root_element(d);
+      BOOST_CHECK_EQUAL(child_element_count(root), 2u);
+      set_attribute(d, "//bar", "xyz", "23");
+      auto r = doc::dump_format_memory(d, false);
+      BOOST_CHECK_EQUAL(string(r.first.get(), r.second), "<?xml version=\"1.0\"?>\n"
+          "<root><foo><bar xyz=\"23\">Hello</bar></foo>"
+          "<bar xyz=\"23\">World</bar></root>\n");
+    }
+
   BOOST_AUTO_TEST_SUITE_END() // util_
 
 BOOST_AUTO_TEST_SUITE_END() // libxxxml

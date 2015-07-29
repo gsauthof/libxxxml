@@ -101,7 +101,7 @@ namespace xxxml {
 
   // }}}
 
-  using Char_Ptr = std::unique_ptr<xmlChar, void (*)(void*)>;
+  using Char_Ptr = std::unique_ptr<char, void (*)(void*)>;
 
   namespace doc {
 
@@ -109,7 +109,7 @@ namespace xxxml {
 
     xmlNode *get_root_element(const Ptr &doc);
     xmlNode *set_root_element(Ptr &doc, xmlNode *root);
-    std::pair<Char_Ptr, size_t> dump_format_memory(Ptr &doc, int format = 1);
+    std::pair<Char_Ptr, size_t> dump_format_memory(Ptr &doc, bool format = true);
 
     unsigned format_dump(FILE *f, const Ptr &doc, bool format = true);
 
@@ -252,6 +252,11 @@ namespace xxxml {
   xmlAttr *new_prop(xmlNode *node,
       const std::string &name, const std::string &value);
   // XXX add ns version
+
+
+  xmlAttr *set_prop(xmlNode *node, const char *name, const char *value);
+  xmlAttr *set_prop(xmlNode *node,
+      const std::string &name, const std::string &value);
 
   const char *get_prop(const xmlNode *node, const char *name);
 

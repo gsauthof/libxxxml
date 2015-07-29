@@ -159,6 +159,14 @@ namespace xxxml {
         add(node, path, value, replace_value);
     }
 
+    void set_attribute(doc::Ptr &doc, const std::string &xpath,
+        const std::string &name, const std::string &value)
+    {
+      Node_Set node_set(doc, xpath);
+      for (auto node : node_set)
+        set_prop(node, name, value);
+    }
+
   }
 
 }
