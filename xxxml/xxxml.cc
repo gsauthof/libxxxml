@@ -583,6 +583,15 @@ namespace xxxml {
         throw Runtime_Error("doc format dump failed");
       return unsigned(r);
     }
+
+    Node_Ptr copy_node(xmlNode *node, Ptr &doc, int extended)
+    {
+      xmlNode *r = xmlDocCopyNode(node, doc.get(), extended);
+      if (!r)
+        throw Runtime_Error("could not copy node into doc");
+      return Node_Ptr(r, xmlFreeNode);
+    }
+
   }
 
   void elem_dump(FILE *f, const doc::Ptr &doc, const xmlNode *node)
@@ -614,6 +623,14 @@ namespace xxxml {
   xmlNode *first_element_child(xmlNode *node)
   {
     return xmlFirstElementChild(node);
+  }
+  const xmlNode *last_element_child(const xmlNode *node)
+  {
+    return xmlLastElementChild(const_cast<xmlNode*>(node));
+  }
+  xmlNode *last_element_child(xmlNode *node)
+  {
+    return xmlLastElementChild(node);
   }
   const xmlNode *next_element_sibling(const xmlNode *node)
   {
@@ -714,6 +731,20 @@ namespace xxxml {
     xmlNode *r = xmlAddChild(parent, node);
     if (!r)
       throw Runtime_Error("Could not add child");
+    return r;
+  }
+  xmlNode *add_prev_sibling(xmlNode *cur, xmlNode *node)
+  {
+    xmlNode *r = xmlAddPrevSibling(cur, node);
+    if (!r)
+      throw Runtime_Error("Could not add prev sibling");
+    return r;
+  }
+  xmlNode *add_next_sibling(xmlNode *cur, xmlNode *node)
+  {
+    xmlNode *r = xmlAddNextSibling(cur, node);
+    if (!r)
+      throw Runtime_Error("Could not add next sibling");
     return r;
   }
   void node_add_content(xmlNode *node, const char *text, unsigned len)

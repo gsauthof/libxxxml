@@ -4,7 +4,6 @@
 #include <string>
 #include <xxxml/xxxml.hh>
 
-// XXX add function to insert XML snippets (index to specify before/after/child ...)
 
 namespace xxxml {
 
@@ -39,6 +38,13 @@ namespace xxxml {
 
     void set_attribute(doc::Ptr &doc, const std::string &xpath,
         const std::string &name, const std::string &value);
+
+    // position: 1 -> first child, -1 -> last child, 2 -> after node, -2 -> before node
+    void add_snippet(xmlNode *node, const char *begin, const char *end,
+        int position);
+    void add_snippet(doc::Ptr &doc, const std::string &xpath,
+        const char *begin, const char *end,
+        int position);
 
   }
 

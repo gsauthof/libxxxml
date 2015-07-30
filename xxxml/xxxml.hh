@@ -103,6 +103,8 @@ namespace xxxml {
 
   using Char_Ptr = std::unique_ptr<char, void (*)(void*)>;
 
+  using Node_Ptr = std::unique_ptr<xmlNode, void(*)(xmlNode*)>;
+
   namespace doc {
 
     using Ptr = std::unique_ptr<xmlDoc, void (*)(xmlDoc*)>;
@@ -113,6 +115,7 @@ namespace xxxml {
 
     unsigned format_dump(FILE *f, const Ptr &doc, bool format = true);
 
+    Node_Ptr copy_node(xmlNode *node, Ptr &doc, int extended);
   }
 
   doc::Ptr new_doc();
@@ -219,6 +222,8 @@ namespace xxxml {
 
   const xmlNode *first_element_child(const xmlNode *node);
   xmlNode *first_element_child(xmlNode *node);
+  const xmlNode *last_element_child(const xmlNode *node);
+  xmlNode *last_element_child(xmlNode *node);
   const xmlNode *next_element_sibling(const xmlNode *node);
   xmlNode *next_element_sibling(xmlNode *node);
 
@@ -240,11 +245,12 @@ namespace xxxml {
   // XXX add namespace overload
 
   xmlNode *add_child(xmlNode *parent, xmlNode *node);
+  xmlNode *add_prev_sibling(xmlNode *cur, xmlNode *node);
+  xmlNode *add_next_sibling(xmlNode *cur, xmlNode *node);
 
   void node_add_content(xmlNode *node, const char *text, unsigned len);
   void node_add_content(xmlNode *node, const std::string &text);
 
-  using Node_Ptr = std::unique_ptr<xmlNode, void(*)(xmlNode*)>;
 
   Node_Ptr unlink_node(xmlNode *node);
 

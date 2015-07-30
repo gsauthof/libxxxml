@@ -20,6 +20,7 @@
 #define REGEX_REPLACE std::regex_replace
 #endif
 
+#include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/find_iterator.hpp>
 #include <boost/algorithm/string/finder.hpp>
 #include <boost/algorithm/string/classification.hpp>
@@ -165,6 +166,57 @@ namespace xxxml {
       Node_Set node_set(doc, xpath);
       for (auto node : node_set)
         set_prop(node, name, value);
+    }
+
+    void add_snippet(doc::Ptr &doc, xmlNode *node, const char *begin, const char *end,
+        int position)
+    {
+      doc::Ptr temp_doc = read_memory(begin, end, nullptr, nullptr);
+      xmlNode *subtree_root = doc::get_root_element(temp_doc);
+      Node_Ptr x = doc::copy_node(subtree_root, doc, 1);
+      if (!subtree_root)
+        throw runtime_error("new document has no root");
+      enum { FIRST_CHILD = 1, LAST_CHILD = -1, BEFORE_NODE = -2, AFTER_NODE = 2};
+      switch (position) {
+        case FIRST_CHILD:
+          // XXX add variants of add_child, add_next_sibling?
+          // i.e. ones that take a Node_Ptr
+          {
+            xmlNode *first = first_element_child(node);
+            if (first) {
+              add_prev_sibling(first, x.get());
+              x.release();
+            } else {
+              add_child(node, x.get());
+              x.release();
+            }
+          }
+          break;
+        case LAST_CHILD:
+          add_child(node, x.get());
+          x.release();
+          break;
+        case BEFORE_NODE:
+          add_prev_sibling(node, x.get());
+          x.release();
+          break;
+        case AFTER_NODE:
+          add_next_sibling(node, x.get());
+          x.release();
+          break;
+        default:
+          throw runtime_error("Unknown position: "
+              + boost::lexical_cast<string>(position));
+      }
+    }
+
+    void add_snippet(doc::Ptr &doc, const std::string &xpath,
+        const char *begin, const char *end,
+        int position)
+    {
+      Node_Set node_set(doc, xpath);
+      for (auto node : node_set)
+        add_snippet(doc, node, begin, end, position);
     }
 
   }
