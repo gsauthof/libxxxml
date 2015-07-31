@@ -99,9 +99,10 @@ namespace xxxml {
     }
     void set_content(xmlNode *node, const std::string &value)
     {
-      for (xmlNode *i = node->children; i;) {
+      for (xmlNode *i = node->children; i; ) {
+        xmlNode *t = i;
         i = i->next;
-        unlink_node(i);
+        unlink_node(t);
       }
       node_add_content(node, value);
     }
