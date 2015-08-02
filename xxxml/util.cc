@@ -169,7 +169,7 @@ namespace xxxml {
         set_prop(node, name, value);
     }
 
-    void add_snippet(doc::Ptr &doc, xmlNode *node, const char *begin, const char *end,
+    void insert(doc::Ptr &doc, xmlNode *node, const char *begin, const char *end,
         int position)
     {
       doc::Ptr temp_doc = read_memory(begin, end, nullptr, nullptr);
@@ -211,13 +211,13 @@ namespace xxxml {
       }
     }
 
-    void add_snippet(doc::Ptr &doc, const std::string &xpath,
+    void insert(doc::Ptr &doc, const std::string &xpath,
         const char *begin, const char *end,
         int position)
     {
       Node_Set node_set(doc, xpath);
       for (auto node : node_set)
-        add_snippet(doc, node, begin, end, position);
+        insert(doc, node, begin, end, position);
     }
 
   }

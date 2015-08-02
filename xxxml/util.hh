@@ -40,9 +40,9 @@ namespace xxxml {
         const std::string &name, const std::string &value);
 
     // position: 1 -> first child, -1 -> last child, 2 -> after node, -2 -> before node
-    void add_snippet(xmlNode *node, const char *begin, const char *end,
+    void insert(xmlNode *node, const char *begin, const char *end,
         int position);
-    void add_snippet(doc::Ptr &doc, const std::string &xpath,
+    void insert(doc::Ptr &doc, const std::string &xpath,
         const char *begin, const char *end,
         int position);
 
