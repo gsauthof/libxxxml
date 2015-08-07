@@ -214,6 +214,30 @@ BOOST_AUTO_TEST_SUITE(libxxxml)
           "</root>\n");
     }
 
+    BOOST_AUTO_TEST_CASE(get_string)
+    {
+      doc::Ptr d = read_memory(
+          "<root><foo><bar>Hello</bar></foo><xyz>World</xyz></root>");
+      BOOST_CHECK_EQUAL(xxxml::util::xpath::get_string(d, "//bar"), "Hello");
+      BOOST_CHECK_EQUAL(xxxml::util::xpath::get_string(d, "string(//bar)"),
+          "Hello");
+      BOOST_CHECK_EQUAL(xxxml::util::xpath::get_string(d, "//bar/text()"), "Hello");
+      BOOST_CHECK_EQUAL(xxxml::util::xpath::get_string(d, "string(//bar/text())"),
+          "Hello");
+      BOOST_CHECK_EQUAL(xxxml::util::xpath::get_string(d, "//xyz"), "World");
+    }
+
+    BOOST_AUTO_TEST_CASE(get_string_empty)
+    {
+      doc::Ptr d = read_memory(
+          "<root><foo><bar>Hello</bar></foo><xyz>World</xyz></root>");
+      BOOST_CHECK_THROW(xxxml::util::xpath::get_string(d, "//baz"),
+          std::underflow_error);
+      BOOST_CHECK_THROW(xxxml::util::xpath::get_string(d, "//baz"),
+          std::runtime_error);
+      BOOST_CHECK_EQUAL(xxxml::util::xpath::get_string(d, "string(//baz)"), "");
+    }
+
   BOOST_AUTO_TEST_SUITE_END() // util_
 
 BOOST_AUTO_TEST_SUITE_END() // libxxxml

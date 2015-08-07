@@ -220,6 +220,37 @@ namespace xxxml {
         insert(doc, node, begin, end, position);
     }
 
+    namespace xpath {
+
+      std::string get_string(const doc::Ptr &doc, const std::string &expr)
+      {
+        xxxml::xpath::Context_Ptr c = xxxml::xpath::new_context(doc);
+        xxxml::xpath::Object_Ptr o = xxxml::xpath::eval(expr, c);
+        switch (o.get()->type) {
+          case XPATH_NODESET:
+            {
+              if (!o.get()->nodesetval)
+                throw logic_error("nodesetval is null");
+              if (!o.get()->nodesetval->nodeNr)
+                throw underflow_error("xpath nodeset is empty");
+              auto x = xxxml::xpath::cast_node_set_to_string(o);
+              return string(x.release());
+            }
+            break;
+          case XPATH_STRING:
+            {
+              return string(reinterpret_cast<const char*>(o.get()->stringval));
+            }
+            break;
+          default:
+            break;
+        }
+        throw Logic_Error("xpath result type not implemented yet");
+        return "";
+      }
+
+    }
+
   }
 
 }

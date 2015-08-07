@@ -46,6 +46,12 @@ namespace xxxml {
         const char *begin, const char *end,
         int position);
 
+
+    namespace xpath {
+
+      std::string get_string(const doc::Ptr &doc, const std::string &expr);
+
+    }
   }
 
 

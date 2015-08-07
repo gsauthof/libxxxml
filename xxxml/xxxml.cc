@@ -55,9 +55,10 @@ namespace xxxml {
       return ctxt_compile(ctxt, expr.c_str());
     }
 
-    Context_Ptr new_context(doc::Ptr &doc)
+    Context_Ptr new_context(const doc::Ptr &doc)
     {
-      Context_Ptr r(xmlXPathNewContext(doc.get()), xmlXPathFreeContext);
+      Context_Ptr r(xmlXPathNewContext(const_cast<xmlDoc*>(doc.get())),
+          xmlXPathFreeContext);
       if (!r)
         throw Runtime_Error("Could not create xpath context");
       return std::move(r);
@@ -134,6 +135,21 @@ namespace xxxml {
       if (!r)
         throw Eval_Error("Could not evaluate compiled xpath expression");
       return std::move(r);
+    }
+
+    Char_Ptr cast_node_set_to_string(const xmlNodeSet *ns)
+    {
+      auto r = xmlXPathCastNodeSetToString(const_cast<xmlNodeSet*>(ns));
+      if (!r)
+        throw Runtime_Error("xmlXPathCastNodeSetToString returned null");
+      return Char_Ptr(reinterpret_cast<char*>(r), xmlFree);
+    }
+    Char_Ptr cast_node_set_to_string(const Object_Ptr &o)
+    {
+      const xmlNodeSet *ns = o.get()->nodesetval;
+      if (!ns)
+        throw Runtime_Error("xpath result is not a nodeset");
+      return cast_node_set_to_string(ns);
     }
 
   }

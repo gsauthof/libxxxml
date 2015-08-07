@@ -292,7 +292,7 @@ namespace xxxml {
     Object_Ptr new_cstring(const char *value);
     Object_Ptr new_cstring(const std::string &value);
 
-    Context_Ptr new_context(doc::Ptr &doc);
+    Context_Ptr new_context(const doc::Ptr &doc);
 
     void register_ns(Context_Ptr &, const std::string &prefix, const std::string &ns);
     void register_ns(Context_Ptr &, const char *prefix, const char *ns);
@@ -323,6 +323,9 @@ namespace xxxml {
         Context_Ptr &context);
 
     Object_Ptr compiled_eval(Comp_Expr_Ptr &expr, Context_Ptr &context);
+
+    Char_Ptr cast_node_set_to_string(const xmlNodeSet *ns);
+    Char_Ptr cast_node_set_to_string(const Object_Ptr &o);
   }
 
   namespace schema {
