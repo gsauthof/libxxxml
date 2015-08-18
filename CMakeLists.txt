@@ -3,17 +3,19 @@ cmake_minimum_required(VERSION 2.8)
 
 project(libxxxml CXX)
 
-include (${CMAKE_SOURCE_DIR}/cmake/modules/coverage.cmake)
-include (${CMAKE_SOURCE_DIR}/cmake/modules/sanitize.cmake)
+IF(${CMAKE_PROJECT_NAME} STREQUAL "libxxxml")
+  include (${CMAKE_SOURCE_DIR}/cmake/modules/coverage.cmake)
+  include (${CMAKE_SOURCE_DIR}/cmake/modules/sanitize.cmake)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -Wall")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -Wall")
 
-# for unittests
-find_package(Boost 1.55
-  COMPONENTS
-    unit_test_framework
-  REQUIRED
-  )
+  # for unittests
+  find_package(Boost 1.55
+    COMPONENTS
+      unit_test_framework
+    REQUIRED
+    )
+endif() # CMAKE_PROJECT_NAME
 
 find_library(XML2_LIB NAMES xml2 HINTS /opt/csw/lib/64)
 find_path(XML2_INCLUDE_DIR libxml/xmlreader.h PATH_SUFFIXES libxml2
@@ -32,7 +34,7 @@ add_library(xxxml_static STATIC
   )
 
 set_property(TARGET xxxml xxxml_static PROPERTY INCLUDE_DIRECTORIES
-  ${Boost_INCLUDE_DIRS}
+  #${Boost_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${XML2_INCLUDE_DIR}
   )
