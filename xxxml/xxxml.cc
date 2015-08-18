@@ -648,6 +648,10 @@ namespace xxxml {
   {
     return xmlLastElementChild(node);
   }
+  const xmlNode *previous_element_sibling(const xmlNode *node)
+  {
+    return xmlPreviousElementSibling(const_cast<xmlNode*>(node));
+  }
   const xmlNode *next_element_sibling(const xmlNode *node)
   {
     return xmlNextElementSibling(const_cast<xmlNode*>(node));
@@ -1206,5 +1210,6 @@ namespace xxxml {
   {
     return new_text_writer_filename(filename.c_str(), compression);
   }
+
 
 }

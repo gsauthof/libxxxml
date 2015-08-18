@@ -224,6 +224,7 @@ namespace xxxml {
   xmlNode *first_element_child(xmlNode *node);
   const xmlNode *last_element_child(const xmlNode *node);
   xmlNode *last_element_child(xmlNode *node);
+  const xmlNode *previous_element_sibling(const xmlNode *node);
   const xmlNode *next_element_sibling(const xmlNode *node);
   xmlNode *next_element_sibling(xmlNode *node);
 
