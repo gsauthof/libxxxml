@@ -777,6 +777,15 @@ namespace xxxml {
     node_add_content(node, text.data(), text.size());
   }
 
+  void node_set_name(xmlNode *node, const char *name)
+  {
+    xmlNodeSetName(node, reinterpret_cast<const xmlChar*>(name));
+  }
+  void node_set_name(xmlNode *node, const std::string &name)
+  {
+    node_set_name(node, name.c_str());
+  }
+
   Node_Ptr unlink_node(xmlNode *node)
   {
     return Node_Ptr((xmlUnlinkNode(node), node), xmlFreeNode);

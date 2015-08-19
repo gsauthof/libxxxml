@@ -252,6 +252,9 @@ namespace xxxml {
   void node_add_content(xmlNode *node, const char *text, unsigned len);
   void node_add_content(xmlNode *node, const std::string &text);
 
+  void node_set_name(xmlNode *node, const char *name);
+  void node_set_name(xmlNode *node, const std::string &name);
+
 
   Node_Ptr unlink_node(xmlNode *node);
 
