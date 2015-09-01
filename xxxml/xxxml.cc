@@ -446,6 +446,25 @@ namespace xxxml {
     return read_file(filename.c_str(), encoding, options);
   }
 
+  void save_format_file_enc(const char *filename,
+      const doc::Ptr &doc,
+      const char *encoding,
+      bool format)
+  {
+    int r = xmlSaveFormatFileEnc(filename,
+        const_cast<xmlDoc*>(doc.get()),
+        encoding, format);
+    if (r == -1)
+      throw Runtime_Error("Could not save: " + string(filename));
+  }
+  void save_format_file_enc(const std::string &filename,
+      const doc::Ptr &doc,
+      const char *encoding,
+      bool format)
+  {
+    return save_format_file_enc(filename.c_str(), doc, encoding, format);
+  }
+
   namespace dict {
 
     using Ptr = std::unique_ptr<xmlDict, void(*)(xmlDict*)>;

@@ -171,6 +171,15 @@ namespace xxxml {
       const char *encoding = nullptr,
       int options = 0);
 
+  void save_format_file_enc(const char *filename,
+      const doc::Ptr &doc,
+      const char *encoding = nullptr,
+      bool format = true);
+  void save_format_file_enc(const std::string &filename,
+      const doc::Ptr &doc,
+      const char *encoding = nullptr,
+      bool format = true);
+
   // The `xmlParse*` family of functions are deliberately not
   // mapped because they don't support the use of `xmlDict`
   // dictionaries nor options. They even behave differently than
