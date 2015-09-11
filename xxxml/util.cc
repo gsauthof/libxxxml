@@ -253,6 +253,13 @@ namespace xxxml {
 
     }
 
-  }
+    bool has_root(const doc::Ptr &doc)
+    {
+      auto r = xmlDocGetRootElement(doc.get());
+      return r;
+    }
 
-}
+  } // util
+
+
+} // xxxml

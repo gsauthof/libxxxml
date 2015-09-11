@@ -9,6 +9,8 @@ namespace xxxml {
 
   namespace util {
 
+    bool has_root(const doc::Ptr &doc);
+
     class Node_Set {
       private:
         xpath::Context_Ptr c_;
