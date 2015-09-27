@@ -215,6 +215,17 @@ BOOST_AUTO_TEST_SUITE(libxxxml)
           "<root><foo><bar>Hello</bar><bar>World</bar></foo>"
           "</root>\n");
     }
+    BOOST_AUTO_TEST_CASE(insert_into_empty_doc)
+    {
+      doc::Ptr d = new_doc();
+      BOOST_REQUIRE(d.get());
+      const char inp[] = "<root><foo><bar>Hello</bar><bar>World</bar></foo></root>";
+      insert(d, nullptr, inp, inp + sizeof(inp) - 1, -1);
+      auto r = doc::dump_format_memory(d, false);
+      BOOST_CHECK_EQUAL(string(r.first.get(), r.second), "<?xml version=\"1.0\"?>\n"
+          "<root><foo><bar>Hello</bar><bar>World</bar></foo>"
+          "</root>\n");
+    }
 
     BOOST_AUTO_TEST_CASE(get_string)
     {
