@@ -201,7 +201,8 @@ namespace xxxml {
       }
     }
 
-    void insert(doc::Ptr &doc, xmlNode *node, const char *begin, const char *end,
+    xmlNode *insert(doc::Ptr &doc, xmlNode *node,
+        const char *begin, const char *end,
         int position)
     {
       doc::Ptr temp_doc = read_memory(begin, end, nullptr, nullptr);
@@ -210,7 +211,7 @@ namespace xxxml {
         throw runtime_error("new document has no root");
       Node_Ptr x = doc::copy_node(subtree_root, doc, 1);
       insert(doc, node, x.get(), position);
-      x.release();
+      return x.release();
     }
 
     void insert(doc::Ptr &doc, const std::string &xpath,
