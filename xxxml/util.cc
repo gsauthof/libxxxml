@@ -172,6 +172,11 @@ namespace xxxml {
     void insert(doc::Ptr &doc, xmlNode *node, xmlNode *new_node,
         int position)
     {
+      if (!node) {
+        doc::set_root_element(doc, new_node);
+        return;
+      }
+
       enum { FIRST_CHILD = 1, LAST_CHILD = -1, BEFORE_NODE = -2, AFTER_NODE = 2};
       switch (position) {
         case FIRST_CHILD:
