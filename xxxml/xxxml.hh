@@ -111,7 +111,8 @@ namespace xxxml {
 
     xmlNode *get_root_element(const Ptr &doc);
     xmlNode *set_root_element(Ptr &doc, xmlNode *root);
-    std::pair<Char_Ptr, size_t> dump_format_memory(Ptr &doc, bool format = true);
+    std::pair<Char_Ptr, size_t> dump_format_memory(const Ptr &doc,
+        bool format = true);
 
     unsigned format_dump(FILE *f, const Ptr &doc, bool format = true);
 

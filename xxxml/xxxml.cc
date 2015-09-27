@@ -600,7 +600,7 @@ namespace xxxml {
     {
       return xmlDocSetRootElement(doc.get(), root);
     }
-    std::pair<Char_Ptr, size_t> dump_format_memory(Ptr &doc, bool format)
+    std::pair<Char_Ptr, size_t> dump_format_memory(const Ptr &doc, bool format)
     {
       xmlChar *s = nullptr;
       int n = 0;
