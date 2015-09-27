@@ -285,6 +285,10 @@ namespace xxxml {
   Output_Buffer_Ptr alloc_output_buffer(
       xmlCharEncodingHandler *encoder = nullptr);
 
+  void node_dump_output(Output_Buffer_Ptr &buf, const doc::Ptr &doc,
+      const xmlNode *cur, int level = 2, bool format = true,
+      const char *encoding = nullptr);
+
   namespace xpath {
 
     using Context_Ptr

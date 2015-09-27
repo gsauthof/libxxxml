@@ -2,6 +2,8 @@
 
 #include <xxxml/util.hh>
 
+#include <boost/algorithm/string/erase.hpp>
+
 using namespace std;
 
 BOOST_AUTO_TEST_SUITE(libxxxml)
@@ -236,6 +238,37 @@ BOOST_AUTO_TEST_SUITE(libxxxml)
       BOOST_CHECK_THROW(xxxml::util::xpath::get_string(d, "//baz"),
           std::runtime_error);
       BOOST_CHECK_EQUAL(xxxml::util::xpath::get_string(d, "string(//baz)"), "");
+    }
+
+    BOOST_AUTO_TEST_CASE(dump)
+    {
+      doc::Ptr d = read_memory("<root><foo>Hello</foo><bar>World</bar></root>");
+      BOOST_REQUIRE(d.get());
+
+      const xmlNode* root = doc::get_root_element(d);
+      BOOST_CHECK_EQUAL(name(root), "root");
+
+      auto r = xxxml::util::dump(d, root);
+
+      string s(r.first.first, r.first.second);
+      BOOST_CHECK(s.find("<bar>World</bar>") != s.npos);
+      BOOST_CHECK(s.find("<root>") != s.npos);
+    }
+
+    BOOST_AUTO_TEST_CASE(dump_one)
+    {
+      doc::Ptr d = read_memory("<root><foo>Hello</foo><bar><a>Wo</a><b>rld</b></bar></root>");
+      BOOST_REQUIRE(d.get());
+
+      const xmlNode* root = doc::get_root_element(d);
+      BOOST_CHECK_EQUAL(name(root), "root");
+
+      auto r = xxxml::util::dump(d, xxxml::last_element_child(root));
+
+      string s(r.first.first, r.first.second);
+      boost::erase_all(s, " ");
+      boost::erase_all(s, "\n");
+      BOOST_CHECK_EQUAL(s,  "<bar><a>Wo</a><b>rld</b></bar>");
     }
 
   BOOST_AUTO_TEST_SUITE_END() // util_

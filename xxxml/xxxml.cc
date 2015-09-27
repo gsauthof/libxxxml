@@ -1239,5 +1239,13 @@ namespace xxxml {
     return new_text_writer_filename(filename.c_str(), compression);
   }
 
+  void node_dump_output(Output_Buffer_Ptr &buf, const doc::Ptr &doc,
+      const xmlNode *cur, int level, bool format,
+      const char *encoding)
+  {
+    xmlNodeDumpOutput(buf.get(), const_cast<xmlDoc*>(doc.get()),
+        const_cast<xmlNode*>(cur), level, format, encoding);
+  }
+
 
 }

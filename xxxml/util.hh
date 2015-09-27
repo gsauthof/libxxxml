@@ -56,6 +56,9 @@ namespace xxxml {
       std::string get_string(const doc::Ptr &doc, const std::string &expr);
 
     }
+
+    std::pair<std::pair<const char*, const char*>, Output_Buffer_Ptr>
+      dump(const doc::Ptr &doc, const xmlNode *node);
   }
 
 

@@ -259,6 +259,19 @@ namespace xxxml {
       return r;
     }
 
+    std::pair<std::pair<const char*, const char*>, Output_Buffer_Ptr>
+      dump(const doc::Ptr &doc, const xmlNode *node)
+      {
+        xxxml::Output_Buffer_Ptr b = alloc_output_buffer();
+        xxxml::node_dump_output(b, doc, node);
+        return make_pair(
+            make_pair(
+              reinterpret_cast<const char*>(xmlBufContent(b.get()->buffer)),
+              reinterpret_cast<const char*>(xmlBufEnd(b.get()->buffer))
+              ),
+            std::move(b));
+      }
+
   } // util
 
 
