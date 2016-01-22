@@ -35,7 +35,9 @@ add_library(xxxml_static STATIC
   )
 
 set_property(TARGET xxxml xxxml_static PROPERTY INCLUDE_DIRECTORIES
-  #${Boost_INCLUDE_DIRS}
+  # needed for <regex>, i.e. boost/regex.hpp if gcc <= 4.9
+  # cf. xxxml/util.cc
+  ${Boost_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${XML2_INCLUDE_DIR}
   )

@@ -7,6 +7,8 @@
 // unfortunately, even with gcc 4.9, the regex implementation is not complete,
 // e.g. sub-expression references are not understood
 // also, undefined-behavior sanitizer complaints about a invalid bool value
+// GCC 5.3.1: similar story
+//
 //#if defined(__GNUC__) && (__GNUC__ <= 4) && (__GNUC_MINOR__ < 9)
 // use this one with gcc < 4.9
 // cf. https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53631
