@@ -41,6 +41,8 @@ namespace xxxml {
     void set_attribute(doc::Ptr &doc, const std::string &xpath,
         const std::string &name, const std::string &value);
 
+    Node_Ptr create_node(doc::Ptr &doc, const char *begin, const char *end);
+
     // position: 1 -> first child, -1 -> last child, 2 -> after node, -2 -> before node
     void insert(doc::Ptr &doc, xmlNode *node, xmlNode *new_node,
         int position);
