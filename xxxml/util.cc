@@ -206,15 +206,21 @@ namespace xxxml {
       }
     }
 
-    xmlNode *insert(doc::Ptr &doc, xmlNode *node,
-        const char *begin, const char *end,
-        int position)
+    Node_Ptr create_node(doc::Ptr &doc, const char *begin, const char *end)
     {
       doc::Ptr temp_doc = read_memory(begin, end, nullptr, nullptr);
       xmlNode *subtree_root = doc::get_root_element(temp_doc);
       if (!subtree_root)
         throw runtime_error("new document has no root");
       Node_Ptr x = doc::copy_node(subtree_root, doc, 1);
+      return x;
+    }
+
+    xmlNode *insert(doc::Ptr &doc, xmlNode *node,
+        const char *begin, const char *end,
+        int position)
+    {
+      Node_Ptr x = create_node(doc, begin, end);
       insert(doc, node, x.get(), position);
       return x.release();
     }
