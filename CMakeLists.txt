@@ -30,6 +30,10 @@ set(LIB_SRC
 add_library(xxxml SHARED
   ${LIB_SRC}
   )
+target_link_libraries(xxxml
+  ${Boost_REGEX_LIBRARY}
+  ${XML2_LIB}
+  )
 add_library(xxxml_static STATIC
   ${LIB_SRC}
   )
