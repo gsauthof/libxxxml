@@ -10,7 +10,7 @@ IF(${CMAKE_PROJECT_NAME} STREQUAL "libxxxml")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -Wall")
 
   # for unittests
-  find_package(Boost 1.55
+  find_package(Boost 1.54
     COMPONENTS
       unit_test_framework
       regex
