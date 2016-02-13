@@ -7,7 +7,10 @@ IF(${CMAKE_PROJECT_NAME} STREQUAL "libxxxml")
   include (${CMAKE_SOURCE_DIR}/cmake/modules/coverage.cmake)
   include (${CMAKE_SOURCE_DIR}/cmake/modules/sanitize.cmake)
 
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -Wall")
+  # work around clang issue on Ubuntu Trusty, cf.
+  # http://lists.llvm.org/pipermail/llvm-bugs/2014-May/034208.html
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -Wall")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
   # for unittests
   find_package(Boost 1.54
@@ -39,7 +42,7 @@ add_library(xxxml_static STATIC
   )
 
 set_property(TARGET xxxml xxxml_static PROPERTY INCLUDE_DIRECTORIES
-  # needed for <regex>, i.e. boost/regex.hpp if gcc <= 4.9
+  # needed for <regex>, i.e. boost/regex.hpp for certain GCC versions
   # cf. xxxml/util.cc
   ${Boost_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}
