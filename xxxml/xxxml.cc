@@ -17,7 +17,7 @@ namespace xxxml {
       Object_Ptr r(xmlXPathNewCString(value), xmlXPathFreeObject);
       if (!r)
         throw Logic_Error("could not allocate xpath string object");
-      return std::move(r);
+      return r;
     }
     Object_Ptr new_cstring(const std::string &value)
     {
@@ -32,7 +32,7 @@ namespace xxxml {
       if (!r)
         throw Runtime_Error("could not compile xpath expr: "
             + string(expr));
-      return std::move(r);
+      return r;
     }
     Comp_Expr_Ptr compile(const std::string &expr)
     {
@@ -48,7 +48,7 @@ namespace xxxml {
       if (!r)
         throw Runtime_Error("could not context compile xpath expr: "
             + string(expr));
-      return std::move(r);
+      return r;
     }
     Comp_Expr_Ptr ctxt_compile(Context_Ptr &ctxt, const std::string &expr)
     {
@@ -61,7 +61,7 @@ namespace xxxml {
           xmlXPathFreeContext);
       if (!r)
         throw Runtime_Error("Could not create xpath context");
-      return std::move(r);
+      return r;
     }
 
     void register_ns(Context_Ptr &context, const char *prefix, const char *ns)
@@ -105,7 +105,7 @@ namespace xxxml {
           xmlXPathFreeObject);
       if (!r)
         throw Eval_Error("Could not evaluate xpath: " + string(expr));
-      return std::move(r);
+      return r;
     }
     Object_Ptr eval(const std::string &expr, Context_Ptr &context)
     {
@@ -121,7 +121,7 @@ namespace xxxml {
           xmlXPathFreeObject);
       if (!r)
         throw Eval_Error("Could not evaluate xpath: " + string(expr));
-      return std::move(r);
+      return r;
     }
     Object_Ptr node_eval(const std::string &expr, const xmlNode *node,
         Context_Ptr &context)
@@ -134,7 +134,7 @@ namespace xxxml {
           xmlXPathFreeObject);
       if (!r)
         throw Eval_Error("Could not evaluate compiled xpath expression");
-      return std::move(r);
+      return r;
     }
 
     Char_Ptr cast_node_set_to_string(const xmlNodeSet *ns)
@@ -163,7 +163,7 @@ namespace xxxml {
       if (!r)
         throw Parse_Error("could not create schema parser context for: "
             + string(filename));
-      return std::move(r);
+      return r;
     }
     Parser_Ctxt_Ptr new_parser_ctxt(const std::string &filename)
     {
@@ -176,7 +176,7 @@ namespace xxxml {
           xmlSchemaFreeParserCtxt);
       if (!r)
         throw Parse_Error("could not create schema parser context from memory");
-      return std::move(r);
+      return r;
     }
     Parser_Ctxt_Ptr new_mem_parser_ctxt(const char *s)
     {
@@ -192,7 +192,7 @@ namespace xxxml {
       Ptr r(xmlSchemaParse(parser_context.get()), xmlSchemaFree);
       if (!r)
         throw Parse_Error("schema parse error");
-      return std::move(r);
+      return r;
     }
     Valid_Ctxt_Ptr new_valid_ctxt(Ptr &schema)
     {
@@ -229,7 +229,7 @@ namespace xxxml {
       if (!r)
         throw Parse_Error("could not create relaxng parser context for: "
             + string(filename));
-      return std::move(r);
+      return r;
     }
     Parser_Ctxt_Ptr new_parser_ctxt(const std::string &filename)
     {
@@ -242,7 +242,7 @@ namespace xxxml {
           xmlRelaxNGFreeParserCtxt);
       if (!r)
         throw Parse_Error("could not create relaxng parser context from memory");
-      return std::move(r);
+      return r;
     }
     Parser_Ctxt_Ptr new_mem_parser_ctxt(const char *s)
     {
@@ -258,7 +258,7 @@ namespace xxxml {
       Ptr r(xmlRelaxNGParse(parser_context.get()), xmlRelaxNGFree);
       if (!r)
         throw Parse_Error("rng schema parse error");
-      return std::move(r);
+      return r;
     }
 
     Valid_Ctxt_Ptr new_valid_ctxt(Ptr &schema)
@@ -342,7 +342,7 @@ namespace xxxml {
     doc::Ptr r(xmlNewDoc(reinterpret_cast<const xmlChar*>("1.0")), xmlFreeDoc);
     if (!r)
       throw Logic_Error("Could not create new document");
-    return std::move(r);
+    return r;
   }
 
 
@@ -351,7 +351,7 @@ namespace xxxml {
     Parser_Ctxt_Ptr r(xmlNewParserCtxt(), xmlFreeParserCtxt);
     if (!r)
       throw Logic_Error("Could not allocate parser context");
-    return std::move(r);
+    return r;
   }
 
   doc::Ptr ctxt_read_memory(Parser_Ctxt_Ptr &parser_context,
@@ -363,7 +363,7 @@ namespace xxxml {
           URL, encoding, options), xmlFreeDoc);
     if (!r)
       throw Parse_Error("Could not parse XML from memory buffer with ctxt");
-    return std::move(r);
+    return r;
   }
   doc::Ptr ctxt_read_memory(Parser_Ctxt_Ptr &parser_context,
       const std::string &s,
@@ -391,7 +391,7 @@ namespace xxxml {
     if (!r)
       throw Parse_Error("Could not parse XML from file with ctxt: "
           + string(filename));
-    return std::move(r);
+    return r;
   }
   doc::Ptr ctxt_read_file(Parser_Ctxt_Ptr &parser_context,
       const std::string &filename,
@@ -410,7 +410,7 @@ namespace xxxml {
           URL, encoding, options), xmlFreeDoc);
     if (!r)
       throw Parse_Error("Could not parse XML from memory buffer with ctxt");
-    return std::move(r);
+    return r;
   }
   doc::Ptr read_memory(
       const char *s,
@@ -436,7 +436,7 @@ namespace xxxml {
     doc::Ptr r(xmlReadFile(filename, encoding, options), xmlFreeDoc);
     if (!r)
       throw Parse_Error("Could not parse XML from file: " + string(filename));
-    return std::move(r);
+    return r;
   }
   doc::Ptr read_file(
       const std::string &filename,
@@ -474,7 +474,7 @@ namespace xxxml {
       Ptr r(xmlDictCreate(), xmlDictFree);
       if (!r)
         throw Logic_Error("Could not create xml dictionary");
-      return std::move(r);
+      return r;
     }
 
     bool owns(xmlDict *dict, const char *s)
@@ -861,7 +861,7 @@ namespace xxxml {
           xmlFreeTextReader);
       if (!r)
         throw Runtime_Error("could not text read memory");
-      return std::move(r);
+      return r;
     }
     Ptr for_memory(const char *s,
         const char *url,
@@ -871,7 +871,7 @@ namespace xxxml {
           xmlFreeTextReader);
       if (!r)
         throw Runtime_Error("could not text read memory");
-      return std::move(r);
+      return r;
     }
     Ptr for_memory(const std::string &s,
         const char *url,
@@ -881,7 +881,7 @@ namespace xxxml {
           xmlFreeTextReader);
       if (!r)
         throw Runtime_Error("could not text read memory");
-      return std::move(r);
+      return r;
     }
     Ptr for_file(const char *filename, const char *encoding,
         int options)
@@ -890,7 +890,7 @@ namespace xxxml {
           xmlFreeTextReader);
       if (!r)
         throw Runtime_Error("could not text read open:" + string(filename));
-      return std::move(r);
+      return r;
     }
     Ptr for_file(const std::string &filename, const char *encoding,
         int options)
@@ -1220,7 +1220,7 @@ namespace xxxml {
         xmlFreeTextWriter);
     if (!r)
       throw Runtime_Error("Could not create text writer for output buffer");
-    return std::move(r);
+    return r;
   }
   text_writer::Ptr new_text_writer_filename(const char *filename,
       bool compression)
@@ -1231,7 +1231,7 @@ namespace xxxml {
     if (!r)
       throw Runtime_Error("Could not open text writer for: "
           + string(filename));
-    return std::move(r);
+    return r;
   }
   text_writer::Ptr new_text_writer_filename(const std::string &filename,
       bool compression)
