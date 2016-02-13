@@ -67,9 +67,9 @@ IF(${CMAKE_PROJECT_NAME} STREQUAL "libxxxml")
     ${XML2_INCLUDE_DIR}
     )
   target_link_libraries(ut
+    xxxml_static
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
     ${Boost_REGEX_LIBRARY}
-    xxxml_static
     ${XML2_LIB}
     )
   # for executing it from a quickfix environment
