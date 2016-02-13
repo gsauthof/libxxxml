@@ -75,7 +75,7 @@ namespace xxxml {
     }
     void register_ns(Context_Ptr &context, const std::string &prefix, const std::string &ns)
     {
-      register_ns(context, prefix, ns);
+      register_ns(context, prefix.c_str(), ns.c_str());
     }
 
     void register_variable(Context_Ptr &c, const char *name, Object_Ptr value)
