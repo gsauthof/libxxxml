@@ -16,6 +16,8 @@ namespaces.
 
 Georg Sauthoff <mail@georg.so>
 
+[![Build Status](https://travis-ci.org/gsauthof/libxxxml.svg?branch=master)](https://travis-ci.org/gsauthof/libxxxml)
+
 ## Unittests
 
 The included unittests are primarily intended as executable
