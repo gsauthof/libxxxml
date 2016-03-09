@@ -34,61 +34,61 @@ namespace xxxml {
   namespace util {
 
     DF_Traverser::DF_Traverser(const doc::Ptr &doc)
+      : node_(doc::get_root_element(doc))
     {
-      const xmlNode *root = doc::get_root_element(doc);
-      if (root)
-        stack_.push(root);
     }
     const xmlNode *DF_Traverser::operator*() const
     {
-      if (stack_.empty())
+      if (eot())
         throw logic_error("DF_Traverser *: stack is empty");
 
-      return stack_.top();
+      return node_;
     }
     void DF_Traverser::advance()
     {
-      if (stack_.empty())
+      if (eot())
         throw logic_error("DF_Traverser advance: stack is empty");
 
-      auto child = first_element_child(stack_.top());
+      auto child = first_element_child(node_);
       if (child) {
-        stack_.push(child);
+        node_ = child;
+        ++height_;
       } else {
-        while (!stack_.empty()) {
-          auto x = stack_.top();
-          stack_.pop();
-          auto next = next_element_sibling(x);
+        while (node_) {
+          auto next = next_element_sibling(node_);
           if (next) {
-            stack_.push(next);
+            node_ = next;
             break;
           }
+          node_ = node_->parent;
+          --height_;
         }
       }
     }
     void DF_Traverser::skip_children()
     {
-      if (stack_.empty())
+      if (eot())
         throw logic_error("DF_Traverser skip: stack is empty");
 
-      auto x = stack_.top();
-      stack_.pop();
-      auto next = next_element_sibling(x);
+      auto next = next_element_sibling(node_);
       if (next)
-        stack_.push(next);
-      else
+        node_ = next;
+      else {
+        node_ = node_->parent;
+        --height_;
         advance();
+      }
     }
     size_t DF_Traverser::height() const
     {
-      if (stack_.empty())
+      if (eot())
         throw logic_error("DF_Traverser skip: stack is empty");
 
-      return stack_.size()-1;
+      return height_;
     }
     bool DF_Traverser::eot() const
     {
-      return stack_.empty();
+      return !node_;
     }
 
 

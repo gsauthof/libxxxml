@@ -329,6 +329,16 @@ BOOST_AUTO_TEST_SUITE(libxxxml)
         BOOST_CHECK_EQUAL(o.str(), "root 0 foo 1 bar 1 a 2 b 2 baz 1 ");
       }
 
+      BOOST_AUTO_TEST_CASE(related)
+      {
+        doc::Ptr d = read_memory("<root><foo>Hello</foo><bar><a>Wo</a><b>rld</b></bar><baz>23</baz></root>");
+        BOOST_REQUIRE(d.get());
+        xxxml::util::DF_Traverser t(d);
+        BOOST_REQUIRE((*t)->parent != nullptr);
+        BOOST_CHECK((*t)->parent->parent == nullptr);
+        BOOST_CHECK(next_element_sibling((*t)->parent) == nullptr);
+      }
+
     BOOST_AUTO_TEST_SUITE_END() // df_traverser_
 
   BOOST_AUTO_TEST_SUITE_END() // util_

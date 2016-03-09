@@ -2,7 +2,6 @@
 #define XXXML_UTIL_HH
 
 #include <string>
-#include <stack>
 #include <xxxml/xxxml.hh>
 
 
@@ -12,7 +11,8 @@ namespace xxxml {
 
     class DF_Traverser {
       private:
-        std::stack<const xmlNode *> stack_;
+        const xmlNode *node_ {nullptr};
+        size_t height_ {0};
       public:
         DF_Traverser(const doc::Ptr &doc);
         const xmlNode *operator*() const;
