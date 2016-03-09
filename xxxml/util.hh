@@ -2,12 +2,25 @@
 #define XXXML_UTIL_HH
 
 #include <string>
+#include <stack>
 #include <xxxml/xxxml.hh>
 
 
 namespace xxxml {
 
   namespace util {
+
+    class DF_Traverser {
+      private:
+        std::stack<const xmlNode *> stack_;
+      public:
+        DF_Traverser(const doc::Ptr &doc);
+        const xmlNode *operator*() const;
+        void advance();
+        void skip_children();
+        size_t height() const;
+        bool eot() const;
+    };
 
     bool has_root(const doc::Ptr &doc);
 

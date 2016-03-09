@@ -33,6 +33,65 @@ namespace xxxml {
 
   namespace util {
 
+    DF_Traverser::DF_Traverser(const doc::Ptr &doc)
+    {
+      const xmlNode *root = doc::get_root_element(doc);
+      if (root)
+        stack_.push(root);
+    }
+    const xmlNode *DF_Traverser::operator*() const
+    {
+      if (stack_.empty())
+        throw logic_error("DF_Traverser *: stack is empty");
+
+      return stack_.top();
+    }
+    void DF_Traverser::advance()
+    {
+      if (stack_.empty())
+        throw logic_error("DF_Traverser advance: stack is empty");
+
+      auto child = first_element_child(stack_.top());
+      if (child) {
+        stack_.push(child);
+      } else {
+        while (!stack_.empty()) {
+          auto x = stack_.top();
+          stack_.pop();
+          auto next = next_element_sibling(x);
+          if (next) {
+            stack_.push(next);
+            break;
+          }
+        }
+      }
+    }
+    void DF_Traverser::skip_children()
+    {
+      if (stack_.empty())
+        throw logic_error("DF_Traverser skip: stack is empty");
+
+      auto x = stack_.top();
+      stack_.pop();
+      auto next = next_element_sibling(x);
+      if (next)
+        stack_.push(next);
+      else
+        advance();
+    }
+    size_t DF_Traverser::height() const
+    {
+      if (stack_.empty())
+        throw logic_error("DF_Traverser skip: stack is empty");
+
+      return stack_.size()-1;
+    }
+    bool DF_Traverser::eot() const
+    {
+      return stack_.empty();
+    }
+
+
     Node_Set::Node_Set(doc::Ptr &doc, const std::string &xpath)
       :
         c_(xxxml::xpath::new_context(doc)),

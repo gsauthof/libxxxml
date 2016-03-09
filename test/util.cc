@@ -4,6 +4,9 @@
 
 #include <boost/algorithm/string/erase.hpp>
 
+#include <sstream>
+#include <iostream>
+
 using namespace std;
 
 BOOST_AUTO_TEST_SUITE(libxxxml)
@@ -281,6 +284,52 @@ BOOST_AUTO_TEST_SUITE(libxxxml)
       boost::erase_all(s, "\n");
       BOOST_CHECK_EQUAL(s,  "<bar><a>Wo</a><b>rld</b></bar>");
     }
+
+    BOOST_AUTO_TEST_SUITE(df_traverser_)
+
+      BOOST_AUTO_TEST_CASE(basic)
+      {
+        doc::Ptr d = read_memory("<root><foo>Hello</foo><bar><a>Wo</a><b>rld</b></bar></root>");
+        BOOST_REQUIRE(d.get());
+        xxxml::util::DF_Traverser t(d);
+        ostringstream o;
+        while (!t.eot()) {
+          o << xxxml::name(*t) << ' ';
+          t.advance();
+        }
+        BOOST_CHECK_EQUAL(o.str(), "root foo bar a b ");
+      }
+
+      BOOST_AUTO_TEST_CASE(skip)
+      {
+        doc::Ptr d = read_memory("<root><foo>Hello</foo><bar><a>Wo</a><b>rld</b></bar><baz>!</baz></root>");
+        BOOST_REQUIRE(d.get());
+        xxxml::util::DF_Traverser t(d);
+        ostringstream o;
+        while (!t.eot()) {
+          o << xxxml::name(*t) << ' ';
+          if (strcmp(xxxml::name(*t), "bar"))
+            t.advance();
+          else
+            t.skip_children();
+        }
+        BOOST_CHECK_EQUAL(o.str(), "root foo bar baz ");
+      }
+
+      BOOST_AUTO_TEST_CASE(height)
+      {
+        doc::Ptr d = read_memory("<root><foo>Hello</foo><bar><a>Wo</a><b>rld</b></bar><baz>23</baz></root>");
+        BOOST_REQUIRE(d.get());
+        xxxml::util::DF_Traverser t(d);
+        ostringstream o;
+        while (!t.eot()) {
+          o << xxxml::name(*t) << ' ' << t.height() << ' ';
+          t.advance();
+        }
+        BOOST_CHECK_EQUAL(o.str(), "root 0 foo 1 bar 1 a 2 b 2 baz 1 ");
+      }
+
+    BOOST_AUTO_TEST_SUITE_END() // df_traverser_
 
   BOOST_AUTO_TEST_SUITE_END() // util_
 
