@@ -109,7 +109,8 @@ namespace xxxml {
 
     using Ptr = std::unique_ptr<xmlDoc, void (*)(xmlDoc*)>;
 
-    xmlNode *get_root_element(const Ptr &doc);
+    xmlNode *get_root_element(Ptr &doc);
+    const xmlNode *get_root_element(const Ptr &doc);
     xmlNode *set_root_element(Ptr &doc, xmlNode *root);
     std::pair<Char_Ptr, size_t> dump_format_memory(const Ptr &doc,
         bool format = true);

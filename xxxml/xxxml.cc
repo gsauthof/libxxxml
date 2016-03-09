@@ -589,7 +589,14 @@ namespace xxxml {
 
   namespace doc {
 
-    xmlNode *get_root_element(const Ptr &doc)
+    xmlNode *get_root_element(Ptr &doc)
+    {
+      auto r = xmlDocGetRootElement(doc.get());
+      if (!r)
+        throw Runtime_Error("document has no root");
+      return r;
+    }
+    const xmlNode *get_root_element(const Ptr &doc)
     {
       auto r = xmlDocGetRootElement(doc.get());
       if (!r)
