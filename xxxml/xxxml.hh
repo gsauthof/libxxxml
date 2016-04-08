@@ -60,7 +60,7 @@
    global library init code:
 
        LIBXML_TEST_VERSION
-       xmlInitParser();
+       // xmlInitParser(); // included in LIBXML_TEST_VERSION
   
    global cleanup code:
 
@@ -68,6 +68,9 @@
        xmlSchemaCleanupTypes();
       
    (e.g. in `main()`, before/after all threads are started/finished)
+
+   Alternatively, create the xxxml::Library class in main()
+   that calls the above functions in its constructor/destructor.
 
 
    2015, Georg Sauthoff <mail@georg.so>
@@ -100,6 +103,16 @@ namespace xxxml {
   };
 
   // }}}
+
+  class Library {
+    public:
+      Library();
+      ~Library();
+    private:
+      Library(const Library&) =delete;
+      Library &operator=(const Library&) = delete;
+      static bool initialized_;
+  };
 
   using Char_Ptr = std::unique_ptr<char, void (*)(void*)>;
 

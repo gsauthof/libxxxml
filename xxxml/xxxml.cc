@@ -4,13 +4,40 @@
 #include <sstream>
 
 #include <libxml/xpathInternals.h>
+#include <libxml/xmlschemastypes.h>
 
 
 using namespace std;
 
 namespace xxxml {
 
+  // must be called in a multi-threaded program where both threads
+  // call libxml2 functions - even if the threads only work
+  // on different documents
+  // cf. http://www.xmlsoft.org/threads.html
+  //
+  // with single-threaded apps, this call is optional, but
+  // in general a good idea because the version check might
+  // detect broken environments
+  Library::Library()
+  {
+    if (initialized_)
+      throw Logic_Error("there must be just one xxxml lib object");
+    initialized_ = true;
+    LIBXML_TEST_VERSION
+    // LIBXML_TEST_VERSION already calls:
+    //xmlInitParser();
+  }
+  // optional, makes leak detectors happy
+  Library::~Library()
+  {
+    xmlCleanupParser();
+    xmlSchemaCleanupTypes();
+  }
+  bool Library::initialized_ = false;
+
   namespace xpath {
+
 
     Object_Ptr new_cstring(const char *value)
     {
