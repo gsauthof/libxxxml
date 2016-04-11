@@ -16,6 +16,23 @@ BOOST_AUTO_TEST_SUITE(libxxxml)
     using namespace xxxml;
     using namespace xxxml::util;
 
+    BOOST_AUTO_TEST_CASE(path_)
+    {
+      doc::Ptr d = read_memory("<root><foo><foo>Hello</foo></foo><bar><a><b><c><xyz>World</xyz></c></b></a></bar></root>");
+      BOOST_REQUIRE(d.get());
+      xxxml::xpath::Context_Ptr c = xxxml::xpath::new_context(d);
+      xxxml::xpath::Object_Ptr o = xxxml::xpath::eval("//xyz", c);
+      BOOST_REQUIRE(o.get()->type == XPATH_NODESET);
+      BOOST_REQUIRE(o.get()->nodesetval);
+      const xmlNode *node = o.get()->nodesetval->nodeTab[0];
+      BOOST_REQUIRE(node);
+      auto p = xxxml::util::path(node);
+      BOOST_REQUIRE_EQUAL(p.size(), 6u);
+      BOOST_CHECK_EQUAL(xxxml::name(p.front()), "root");
+      BOOST_CHECK_EQUAL(xxxml::name(p[1]), "bar");
+      BOOST_CHECK_EQUAL(xxxml::name(p.back()), "xyz");
+    }
+
     BOOST_AUTO_TEST_CASE(remove_)
     {
       doc::Ptr d = read_memory("<root><foo><foo>Hello</foo></foo><bar>World</bar></root>");

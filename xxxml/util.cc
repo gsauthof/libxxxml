@@ -332,6 +332,17 @@ namespace xxxml {
       return r;
     }
 
+    std::deque<const xmlNode*> path(const xmlNode *node)
+    {
+      std::deque<const xmlNode*> r;
+      auto x = node;
+      while (x && x->type == XML_ELEMENT_NODE) {
+        r.push_front(x);
+        x = x->parent;
+      }
+      return r;
+    }
+
     std::pair<std::pair<const char*, const char*>, Output_Buffer_Ptr>
       dump(const doc::Ptr &doc, const xmlNode *node)
       {

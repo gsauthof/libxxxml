@@ -1,9 +1,10 @@
 #ifndef XXXML_UTIL_HH
 #define XXXML_UTIL_HH
 
-#include <string>
 #include <xxxml/xxxml.hh>
 
+#include <string>
+#include <deque>
 
 namespace xxxml {
 
@@ -23,6 +24,7 @@ namespace xxxml {
     };
 
     bool has_root(const doc::Ptr &doc);
+    std::deque<const xmlNode*> path(const xmlNode *node);
 
     class Node_Set {
       private:
