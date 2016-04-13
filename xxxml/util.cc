@@ -332,15 +332,24 @@ namespace xxxml {
       return r;
     }
 
-    std::deque<const xmlNode*> path(const xmlNode *node)
+    template <typename T>
+    static std::deque<T*> path_prime(T *node)
     {
-      std::deque<const xmlNode*> r;
+      std::deque<T*> r;
       auto x = node;
       while (x && x->type == XML_ELEMENT_NODE) {
         r.push_front(x);
         x = x->parent;
       }
       return r;
+    }
+    std::deque<const xmlNode*> path(const xmlNode *node)
+    {
+      return path_prime(node);
+    }
+    std::deque<xmlNode*> path(xmlNode *node)
+    {
+      return path_prime(node);
     }
 
     std::pair<std::pair<const char*, const char*>, Output_Buffer_Ptr>

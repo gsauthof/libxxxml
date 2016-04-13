@@ -25,6 +25,7 @@ namespace xxxml {
 
     bool has_root(const doc::Ptr &doc);
     std::deque<const xmlNode*> path(const xmlNode *node);
+    std::deque<xmlNode*> path(xmlNode *node);
 
     class Node_Set {
       private:
