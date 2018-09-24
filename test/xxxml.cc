@@ -607,7 +607,7 @@ BOOST_AUTO_TEST_SUITE(libxxxml)
     struct Proxy {
       string message;
     };
-    void local_generic_error_fn(void *ctx, const char * msg, ...)
+    static void local_generic_error_fn(void *ctx, const char * msg, ...)
     {
       Proxy *p = static_cast<Proxy*>(ctx);
       char array[4096] = {0};
@@ -962,7 +962,7 @@ R"(<?xml version='1.0' encoding='UTF-8'?>
     struct Proxy {
       string message;
     };
-    void local_generic_error_fn(void *ctx, const char * msg, ...)
+    static void local_generic_error_fn(void *ctx, const char * msg, ...)
     {
       Proxy *p = static_cast<Proxy*>(ctx);
       char array[4096] = {0};

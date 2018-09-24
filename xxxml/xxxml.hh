@@ -210,8 +210,8 @@ namespace xxxml {
     Ptr create();
 
     // check if the pointer value is from that dictionary
-    bool owns(xmlDict *dict, const xmlChar *s);
-    bool owns(Ptr &dict, const xmlChar *s);
+    bool owns(xmlDict *dict, const char *s);
+    bool owns(Ptr &dict, const char *s);
 
     // check if the string content is already contained in the dictionary
     xmlChar *exists(xmlDict *dict, const char *s, unsigned length);

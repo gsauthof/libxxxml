@@ -167,7 +167,7 @@ namespace xxxml {
       }
       node_add_content(node, value);
     }
-    void add_content(xmlNode *node, const std::string &value, bool replace)
+    static void add_content(xmlNode *node, const std::string &value, bool replace)
     {
       if (replace)
         set_content(node, value);
