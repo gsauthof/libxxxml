@@ -292,7 +292,7 @@ namespace xxxml {
   xmlAttr *set_prop(xmlNode *node,
       const std::string &name, const std::string &value);
 
-  const char *get_prop(const xmlNode *node, const char *name);
+  Char_Ptr get_prop(const xmlNode *node, const char *name);
 
   using Output_Buffer_Ptr
     = std::unique_ptr<xmlOutputBuffer, int (*)(xmlOutputBuffer*)>;

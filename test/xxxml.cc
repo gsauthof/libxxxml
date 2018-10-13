@@ -532,6 +532,17 @@ BOOST_AUTO_TEST_SUITE(libxxxml)
       BOOST_CHECK(s.find("<bar prio=\"1\">World</bar>") != string::npos);
     }
 
+    BOOST_AUTO_TEST_CASE(getprop)
+    {
+      doc::Ptr d = new_doc();
+      xmlNode *root = new_doc_node(d, "root");
+      doc::set_root_element(d, root);
+      xmlAttr *att = new_prop(root, "blah", "23");
+      (void)att;
+      Char_Ptr p = get_prop(root, "blah");
+      BOOST_CHECK_EQUAL(string(p.get()), "23");
+    }
+
     // }}}
   BOOST_AUTO_TEST_SUITE_END() // from_scratch
 

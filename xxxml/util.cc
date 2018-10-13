@@ -309,7 +309,7 @@ namespace xxxml {
               if (!o.get()->nodesetval->nodeNr)
                 throw underflow_error("xpath nodeset is empty");
               auto x = xxxml::xpath::cast_node_set_to_string(o);
-              return string(x.release());
+              return string(x.get());
             }
             break;
           case XPATH_STRING:
